@@ -21,12 +21,10 @@ public:
     tree();
     tree(int);
     void addElement(int);
-    //bool inTree(int);
     std::pair<bool, node*> inTree(int);
     void removeElement(int);
     std::vector<int> traverse();
     void traverseHelper(node*, std::vector<int>&);
-    //void removeElement(int);
 };
 
 node::node(){
@@ -73,7 +71,6 @@ void tree::addElement(int num) {
             };
         };
         
-        //std::cout << current_node->value << std::endl;
         if (current_node->value >= num) {
             current_node->left = new node(num);
         } else {
@@ -168,11 +165,9 @@ void tree::removeElement(int num) {
     // one child node
     if ((element->left == nullptr) != (element->right == nullptr)) {        
         if (onleft) {
-            //((result.second->left->left != nullptr) ? result.second->left->left : result.second->left->right) = element;
             node* child = (result.second->left->left != nullptr) ? result.second->left->left : result.second->left->right;
             result.second->left = child;
         } else {
-            //((result.second->right->left != nullptr) ? result.second->right->left : result.second->right->right) = element;
             node* child = (result.second->right->left != nullptr) ? result.second->right->left : result.second->right->right;
             result.second->right = child;
         };
@@ -226,6 +221,32 @@ void tree::traverseHelper(node* next, std::vector<int>& order) {
     };
 };
 
+// Rebuild tree
+
+node* balanceTreeHelper(std::vector<int> order, int start, int end) {
+    if (start > end){
+        return nullptr;
+    };
+    
+    int mid = (start + end) / 2;
+    node* newnode = new node(order[mid]);
+    
+    newnode->left = balanceTreeHelper(order, start, mid-1);
+    newnode->right = balanceTreeHelper(order, mid+1, end);
+    
+    return newnode;
+  
+};
+
+tree* balanceTree(tree unbalanced) {
+    std::vector<int> in_order = unbalanced.traverse();
+    tree* newtree = new tree();
+    
+    newtree->head = balanceTreeHelper(in_order, 0, in_order.size() - 1);
+    
+    return newtree;
+};
+
 // Function to print binary tree in 2D
 // It does reverse inorder traversal
 void print2DUtil(node *root, int space)
@@ -254,57 +275,13 @@ void print2DUtil(node *root, int space)
 // Wrapper over print2DUtil()
 void print2D(node *root)
 {
-   // Pass initial space count as 0
-   print2DUtil(root, 0);
+    // Pass initial space count as 0
+    print2DUtil(root, 0);
 }
 
-// Rebuild tree
-
-node* balanceTreeHelper(std::vector<int> order, int start, int end) {
-    if (start > end){
-        return nullptr;
-    };
-    
-    int mid = (start + end) / 2;
-    node* newnode = new node(order[mid]);
-    
-    newnode->left = balanceTreeHelper(order, start, mid-1);
-    newnode->right = balanceTreeHelper(order, mid+1, end);
-    
-    return newnode;
-  
-};
-
-tree* balanceTree(tree unbalanced) {
-    std::vector<int> in_order = unbalanced.traverse();
-    tree* newtree = new tree();
-    
-    newtree->head = balanceTreeHelper(in_order, 0, in_order.size() - 1);
-    
-    return newtree;
-};
-
-
-
-
-
-int main(void) {
-    tree test = *new tree();
-    
-    /*test.addElement(15);
-    test.addElement(10);
-    test.addElement(5);
-    test.addElement(7);
-    test.addElement(12);
-    test.addElement(3);
-    std::cout << test.head->value << std::endl;
-    std::cout << test.head->left->value << std::endl;
-    std::cout << test.head->left->left->value << std::endl;
-    std::cout << test.head->left->left->right->value << std::endl;
-    std::cout << test.head->left->right->value << std::endl;
-    std::cout << test.head->left->left->left->value << std::endl;*/
-    
-    
+// Example tree insertions and balancing
+void testTree(tree test)
+{
     test.addElement(50);
     test.addElement(100);
     test.addElement(150);
@@ -319,26 +296,32 @@ int main(void) {
     test.addElement(49);
     
     print2D(test.head);
-    
-    /*test.removeElement(50);
-    std::cout << std::endl;
-    print2D(test.head);
-    test.removeElement(150);
-    std::cout << std::endl;
-    print2D(test.head);*/
+
     std::vector<int> result = test.traverse();
-    
-    //std::cout << std::boolalpha << test.inTree(175).first << std::endl;
-    
+    std::cout << "Elements: [";
     for (auto& element : result) {
-        std::cout << element << ", ";
+        std::cout << ' ' << element << ' ';
     }
-    std::cout << "\n";
+    std::cout << "]\n";
     
+    tree balanced = *balanceTree(test);
+    print2D(balanced.head);
     
-    tree* temp = balanceTree(test);
-    print2D(temp->head);
+    result = balanced.traverse();
+    std::cout << "Elements: [";
+    for (auto& element : result) {
+        std::cout << ' ' << element << ' ';
+    }
+    std::cout << "]\n";
+}
+
+
+
+int main(void) {
     
+    tree Tree = *new tree();
+    
+    testTree(Tree);
     
     return 0;
 }
