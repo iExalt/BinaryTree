@@ -1,2 +1,4 @@
 # BinaryTree
-Simple implementation of a binary tree in C++
+Simple implementation of a binary tree in C++.
+
+Feature complete.

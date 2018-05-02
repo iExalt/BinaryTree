@@ -280,31 +280,32 @@ void print2D(node *root)
 }
 
 // Example tree insertions and balancing
-void testTree(tree test)
+void testTree()
 {
-    test.addElement(50);
-    test.addElement(100);
-    test.addElement(150);
-    test.addElement(200);
-    test.addElement(250);
-    test.addElement(75);
-    test.addElement(74);
-    test.addElement(99);
-    test.addElement(125);
-    test.addElement(175);
-    test.addElement(225);
-    test.addElement(49);
+    tree Tree = *new tree();
+    Tree.addElement(50);
+    Tree.addElement(100);
+    Tree.addElement(150);
+    Tree.addElement(200);
+    Tree.addElement(250);
+    Tree.addElement(75);
+    Tree.addElement(74);
+    Tree.addElement(99);
+    Tree.addElement(125);
+    Tree.addElement(175);
+    Tree.addElement(225);
+    Tree.addElement(49);
     
-    print2D(test.head);
+    print2D(Tree.head);
 
-    std::vector<int> result = test.traverse();
+    std::vector<int> result = Tree.traverse();
     std::cout << "Elements: [";
     for (auto& element : result) {
         std::cout << ' ' << element << ' ';
     }
     std::cout << "]\n";
     
-    tree balanced = *balanceTree(test);
+    tree balanced = *balanceTree(Tree);
     print2D(balanced.head);
     
     result = balanced.traverse();
@@ -318,10 +319,6 @@ void testTree(tree test)
 
 
 int main(void) {
-    
-    tree Tree = *new tree();
-    
-    testTree(Tree);
-    
+    testTree();
     return 0;
 }
